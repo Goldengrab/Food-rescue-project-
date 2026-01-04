@@ -1,0 +1,30 @@
+{
+    "hosting": {
+        "public": ".",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**",
+            "FINAL_SETUP.md",
+            "firestore.rules",
+            "README.md"
+        ],
+        "rewrites": [
+            {
+                "source": "/",
+                "destination": "/RescueRations.html"
+            }
+        ],
+        "headers": [
+            {
+                "source": "**",
+                "headers": [
+                    {
+                        "key": "Cache-Control",
+                        "value": "max-age=0"
+                    }
+                ]
+            }
+        ]
+    }
+}

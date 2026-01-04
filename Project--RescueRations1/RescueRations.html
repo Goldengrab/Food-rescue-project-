@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RescueRations - Plate to Purpose</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --light-green: #e9f7ef;
+            --accent-color: #f1c40f;
+
+            /* Theme Variables */
+            --text-main: #2c3e50;
+            --text-muted: #6c757d;
+            --bg-body: #f8f9fa;
+            --bg-card: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.95);
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --input-bg: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --bg-toggle: #eee;
+        }
+
+        [data-theme="dark"] {
+            --text-main: #ecf0f1;
+            --text-muted: #ced4da;
+            /* Lighter for better contrast */
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --bg-glass: rgba(30, 30, 30, 0.95);
+            --light-green: #143625;
+            --border-color: #444;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --input-bg: #2d2d2d;
+            --bg-gradient: linear-gradient(135deg, #121212 0%, #2c3e50 100%);
+            --bg-toggle: #333;
+        }
+
+        /* Dark Mode Overrides & Contrast Fixes */
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        .list-group-item {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        .form-control {
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        .form-control:focus {
+            background-color: var(--input-bg);
+            color: var(--text-main);
+        }
+
+        .dropdown-menu {
+            background-color: var(--bg-card);
+            border-color: var(--border-color);
+        }
+
+        .dropdown-item {
+            color: var(--text-main);
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-body);
+            background-image: var(--bg-gradient);
+            color: var(--text-main);
+            transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .card-title {
+            color: var(--text-main);
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--dark-green) !important;
+            font-size: 1.5rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1498837167922-ddd27525d352?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 30px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Impact Dashboard */
+        .impact-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .impact-icon {
+            font-size: 2rem;
+            color: var(--primary-green);
+        }
+
+        .impact-card .text-muted {
+            color: var(--text-main) !important;
+            opacity: 0.7;
+        }
+
+        /* Forms & Cards */
+        .custom-card {
+            border: none;
+            border-radius: 20px;
+            background: var(--bg-card);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .food-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent-color);
+            color: var(--text-dark);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-custom {
+            background: var(--primary-green);
+            color: white;
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-custom:hover {
+            background: var(--dark-green);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .btn-outline-custom {
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+            border-radius: 50px;
+            font-weight: 600;
+        }
+
+        .btn-outline-custom:hover {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        /* Form styling */
+        .form-label {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 3px var(--light-green);
+            border-color: var(--primary-green);
+        }
+
+        /* Toggle Switch */
+        .view-toggle {
+            display: flex;
+            background: var(--bg-toggle);
+            border-radius: 30px;
+            padding: 5px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .view-toggle-option {
+            padding: 8px 20px;
+            border-radius: 25px;
+            z-index: 1;
+            transition: color 0.3s;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .view-toggle-active {
+            background: var(--primary-green);
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal Dark Mode Fix */
+        .modal-content {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        /* Fix Close Button in Dark Mode */
+        [data-theme="dark"] .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sticky Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="goHome()">
+                <i class="fas fa-leaf me-2"></i>RescueRations
+            </a>
+
+            <div class="d-flex align-items-center" id="nav-actions">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div id="app-content">
+        <!-- Views rendered here -->
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 text-center p-4"
+                style="border-radius: 20px; background-color: var(--bg-card); color: var(--text-main);">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h3 class="fw-bold mb-2">Rescue Successful!</h3>
+                    <p class="text-muted">You're a hero! Show this code at pickup:</p>
+                    <div class="bg-light p-3 rounded-3 mb-3">
+                        <h1 class="font-monospace text-primary mb-0" id="pickupCode">RESCUE-123</h1>
+                    </div>
+                    <button type="button" class="btn btn-custom w-100" data-bs-dismiss="modal">Got it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="checkoutModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Checkout Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="checkoutForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="userName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="userPhone" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="userEmail" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Quantity to Rescue <small class="text-muted"
+                                        id="qtyHelper">(Max: 1)</small></label>
+                                <input type="number" class="form-control" id="rescueQty" value="1" min="1" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label d-block text-center w-100 p-2">Payment Method</label>
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" name="paymentMethod" id="payCash" value="cash"
+                                        checked>
+                                    <label class="btn btn-outline-secondary" for="payCash">
+                                        <i class="fas fa-wallet me-2"></i>Pay on Pickup
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="paymentMethod" id="payGPay"
+                                        value="gpay">
+                                    <label class="btn btn-outline-primary" for="payGPay">
+                                        <i class="fab fa-google-pay me-2"></i>Google Pay
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label mb-2">Pickup Location <small class="text-muted">(Restaurant
+                                        Address)</small></label>
+                                <div id="map" class="rounded-3 border"
+                                    style="height: 300px; width: 100%; background: #eee;"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-custom px-4" onclick="confirmCheckout()">
+                        Confirm & Rescue <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Maps API (Replace YOUR_API_KEY) -->
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlmOx18TXTwr6S7z0FmxrgB_dWyI3vZhg&callback=initMapPlaceholder"></script>
+
+    <!-- Firebase SDK (Compat for simple HTML usage) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
+
+    <script>
+        // --- Firebase Config ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyC77iv9S3XE_iofq7B3L60rBQXmYHNnSsA",
+            authDomain: "gdg-rbu-hack.firebaseapp.com",
+            projectId: "gdg-rbu-hack",
+            storageBucket: "gdg-rbu-hack.firebasestorage.app",
+            messagingSenderId: "316068989328",
+            appId: "1:316068989328:web:c51848203bd155fa7b4b15",
+            measurementId: "G-NPSLJWSYR1"
+        };
+
+        // Initialize Firebase (Try/Catch in case config is invalid/missing)
+        let auth, db, analytics;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            db = firebase.firestore();
+            if (firebase.analytics) {
+                analytics = firebase.analytics();
+            }
+            console.log('Firebase Initialized');
+        } catch (e) {
+            console.error('Firebase Init Error (Check Config):', e);
+        }
+
+        // --- State Management ---
+        let currentView = 'landing';
+        let currentTheme = localStorage.getItem('theme') || 'auto';
+        let selectedRescueItemId = null;
+        let map, marker;
+        let deliveryLocation = null;
+
+        // Placeholder callback if map script fails or key is missing
+        function initMapPlaceholder() { console.log('Google Maps Loaded'); }
+
+        let foodListings = []; // Will be populated from Firestore
+        let listingsUnsubscribe = null;
+        let myOrders = [];
+        let ordersUnsubscribe = null;
+        let userProfile = null;
+
+        // Default Data for Seeding
+        const defaultListings = [
+            {
+                name: "Veg Biryani",
+                restaurant: "Spicy Bites",
+                location: { lat: 28.6139, lng: 77.2090 }, // Connaught Place
+                qty: 5,
+                originalPrice: 250,
+                discountedPrice: 125,
+                image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+                expiresIn: 3
+            },
+            {
+                name: "Glazed Donuts",
+                restaurant: "Baker's Street",
+                location: { lat: 28.5355, lng: 77.3910 }, // Noida
+                qty: 12,
+                originalPrice: 80,
+                discountedPrice: 40,
+                image: "https://images.unsplash.com/photo-1551024601-569d6f455bf1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+                expiresIn: 5
+            },
+            {
+                name: "Pasta Alfredo",
+                restaurant: "Little Italy",
+                location: { lat: 28.4595, lng: 77.0266 }, // Gurgaon
+                qty: 3,
+                originalPrice: 350,
+                discountedPrice: 200,
+                image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+                expiresIn: 2
+            }
+        ];
+
+        // Subscribe to Firestore Listings
+        function subscribeToListings() {
+            if (!db) {
+                // Fallback to localStorage if DB not ready (demo mode w/o config)
+                foodListings = JSON.parse(localStorage.getItem('foodListings')) || defaultListings;
+                renderApp();
+                return;
+            }
+
+            if (listingsUnsubscribe) {
+                listingsUnsubscribe();
+            }
+
+            listingsUnsubscribe = db.collection('listings').onSnapshot((snapshot) => {
+                if (snapshot.empty) {
+                    seedListings(); // Auto-seed if empty
+                    return;
+                }
+
+                foodListings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Sort by newest? or standard
+                renderApp();
+            }, (error) => {
+                console.error("Error fetching listings:", error);
+            });
+        }
+
+        async function seedListings() {
+            if (!db) return;
+            const batch = db.batch();
+            defaultListings.forEach((item) => {
+                const docRef = db.collection('listings').doc(); // Auto ID
+                batch.set(docRef, { ...item, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+            });
+            await batch.commit();
+            console.log("Seeded initial listings");
+        }
+
+        // --- View Rendering ---
+
+        function goHome() {
+            currentView = 'landing';
+            renderApp();
+        }
+
+        async function setView(view) {
+            // Role-Based Access Control
+            if ((view === 'restaurant' || view === 'consumer')) {
+                if (!auth || !auth.currentUser) {
+                    alert("Please login first to access this page.");
+                    startLogin(view);
+                    return;
+                }
+
+                // If profile is loaded, check role
+                if (userProfile) {
+                    if (view === 'restaurant' && userProfile.role !== 'restaurant') {
+                        alert("Access Denied: This area is for Restaurant Partners only.");
+                        return;
+                    }
+                    if (view === 'consumer' && userProfile.role !== 'consumer') {
+                        alert("Access Denied: This area is for Consumers only.");
+                        return;
+                    }
+                }
+            }
+
+            currentView = view;
+
+            // If entering consumer view, ensure we subscribe to orders
+            if (view === 'consumer') {
+                subscribeToOrders();
+            }
+
+            renderApp();
+        }
+
+        function startLogin(type) {
+            currentView = type === 'restaurant' ? 'login-restaurant' : 'login-consumer';
+            renderApp();
+        }
+
+        function startSignup(type) {
+            currentView = type === 'restaurant' ? 'signup-restaurant' : 'signup-consumer';
+            renderApp();
+        }
+
+        function handleLogout() {
+            if (auth) auth.signOut();
+            goHome();
+        }
+
+        function renderApp() {
+            const container = document.getElementById('app-content');
+            updateNavbar();
+            container.innerHTML = '';
+
+            if (currentView === 'landing') {
+                renderLandingPage(container);
+            } else if (currentView === 'login-restaurant' || currentView === 'login-consumer') {
+                renderLoginView(container, currentView === 'login-restaurant' ? 'Restaurant' : 'Consumer');
+            } else if (currentView === 'signup-restaurant' || currentView === 'signup-consumer') {
+                renderSignupView(container, currentView === 'signup-restaurant' ? 'Restaurant' : 'Consumer');
+            } else if (currentView === 'restaurant') {
+                container.innerHTML = '<div class="container mt-4 mb-5"></div>';
+                renderRestaurantView(container.querySelector('.container'));
+            } else if (currentView === 'consumer') {
+                container.innerHTML = '<div class="container mt-4 mb-5"></div>';
+                renderConsumerView(container.querySelector('.container'));
+            }
+        }
+
+        function updateNavbar() {
+            const navContainer = document.getElementById('nav-actions');
+            let html = '';
+
+            // Theme Toggle
+            const themeBtn = `
+                <div class="dropdown me-3">
+                    <button class="btn btn-light rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-adjust"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                        <li><a class="dropdown-item" href="#" onclick="setTheme('light')"><i class="fas fa-sun me-2"></i>Light</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setTheme('dark')"><i class="fas fa-moon me-2"></i>Dark</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setTheme('auto')"><i class="fas fa-desktop me-2"></i>System</a></li>
+                    </ul>
+                </div>
+            `;
+
+
+            if (currentView === 'landing' || currentView.startsWith('login-') || currentView.startsWith('signup-')) {
+                // Show Login buttons only on Landing, or just Back on Login
+                if (currentView === 'landing') {
+                    html = `
+                        ${themeBtn}
+                        <button class="btn btn-outline-primary me-2 rounded-pill fw-bold" onclick="startLogin('restaurant')">Restaurant Login</button>
+                        <button class="btn btn-primary rounded-pill fw-bold" onclick="startLogin('consumer')">Consumer Login</button>
+            `;
+                } else {
+                    html = `${themeBtn} `; // Minimal nav on login
+                }
+            } else {
+                html = `
+                    ${themeBtn}
+            <button class="btn btn-outline-danger rounded-pill fw-bold" onclick="handleLogout()">Logout</button>
+            `;
+            }
+            navContainer.innerHTML = html;
+        }
+
+        // --- New Login View ---
+        function renderLoginView(container, type) {
+            const isRestaurant = type === 'Restaurant';
+            const icon = isRestaurant ? 'fa-utensils' : 'fa-user';
+            const color = isRestaurant ? 'text-primary' : 'text-success';
+
+            // Use specific test credentials suggestion or generic
+            const demoEmail = isRestaurant ? 'rest@test.com' : 'user@test.com';
+
+            const section = document.createElement('div');
+            section.className = 'container fade-in d-flex align-items-center justify-content-center';
+            section.style.minHeight = '70vh';
+
+            section.innerHTML = `
+                <div class="card custom-card p-4 p-md-5 shadow-lg" style="max-width: 450px; width: 100%;">
+
+                    <div class="text-center mb-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas ${icon} fa-3x ${color}"></i>
+                        </div>
+                        <h2 class="fw-bold">${type} Login</h2>
+                        <p class="text-muted">Welcome back! Please login to continue.</p>
+                    </div>
+                    
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                                <input type="email" class="form-control border-start-0 ps-0" id="loginEmail" placeholder="${demoEmail}" required>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-lock text-muted"></i></span>
+                                <input type="password" class="form-control border-start-0 ps-0" id="loginPass" placeholder="" required>
+                            </div>
+                        </div>
+                        
+                        <div id="loginError" class="alert alert-danger d-none py-2 small mb-3"></div>
+
+                        <button type="submit" class="btn btn-custom w-100 btn-lg mb-3">Login</button>
+                        
+                        <div class="text-center">
+                            <a href="#" class="text-decoration-none small text-muted">Forgot Password?</a>
+                            <hr class="my-4">
+                            <p class="small text-muted mb-0">Don't have an account? <span onclick="startSignup('${type.toLowerCase()}')" class="fw-bold text-primary cursor-pointer" style="cursor:pointer">Sign Up</span></p>
+                            <button type="button" class="btn btn-link text-muted mt-2" onclick="goHome()">Back to Home</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+
+            container.appendChild(section);
+
+
+            document.getElementById('loginForm').addEventListener('submit', (e) => handleLoginSubmit(e, type));
+        }
+
+        function renderSignupView(container, type) {
+            const isRestaurant = type === 'Restaurant';
+            const icon = isRestaurant ? 'fa-utensils' : 'fa-user';
+            const color = isRestaurant ? 'text-primary' : 'text-success';
+
+            const section = document.createElement('div');
+            section.className = 'container fade-in d-flex align-items-center justify-content-center';
+            section.style.minHeight = '70vh';
+
+            section.innerHTML = `
+                <div class="card custom-card p-4 p-md-5 shadow-lg" style="max-width: 450px; width: 100%;">
+
+                    <div class="text-center mb-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="fas ${icon} fa-3x ${color}"></i>
+                        </div>
+                        <h2 class="fw-bold">${type} Sign Up</h2>
+                        <p class="text-muted">Create an account to get started.</p>
+                    </div>
+                    
+                    <form id="signupForm">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="signupName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="signupEmail" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="signupPass" required minlength="6">
+                        </div>
+                        
+                        <div id="signupError" class="alert alert-danger d-none py-2 small mb-3"></div>
+
+                        <button type="submit" class="btn btn-custom w-100 btn-lg mb-3">Create Account</button>
+                        
+                        <div class="text-center">
+                            <p class="small text-muted mb-0">Already have an account? <span onclick="startLogin('${type.toLowerCase()}')" class="fw-bold text-primary cursor-pointer" style="cursor:pointer">Login</span></p>
+                            <button type="button" class="btn btn-link text-muted mt-2" onclick="goHome()">Back to Home</button>
+                        </div>
+                    </form>
+                </div>
+
+                `;
+
+            container.appendChild(section);
+
+            document.getElementById('signupForm').addEventListener('submit', (e) => handleSignupSubmit(e, type));
+        }
+
+        async function handleLoginSubmit(e, type) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPass').value;
+            const errorDiv = document.getElementById('loginError');
+
+            errorDiv.classList.add('d-none');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+            submitBtn.disabled = true;
+
+            try {
+                if (auth) {
+                    await auth.signInWithEmailAndPassword(email, pass);
+                    // Auth state listener would usually handle redirect, but we force it for clarity here
+                    setView(type === 'Restaurant' ? 'restaurant' : 'consumer');
+                } else {
+                    // Fallback for demo without config
+                    console.warn('Firebase Auth not configured. simulating login.');
+                    setTimeout(() => {
+                        setView(type === 'Restaurant' ? 'restaurant' : 'consumer');
+                    }, 1000);
+                }
+            } catch (err) {
+                errorDiv.innerText = err.message || "Login failed. Check credentials.";
+                errorDiv.classList.remove('d-none');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        async function handleSignupSubmit(e, type) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const pass = document.getElementById('signupPass').value;
+            const errorDiv = document.getElementById('signupError');
+
+            errorDiv.classList.add('d-none');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating...';
+            submitBtn.disabled = true;
+
+            try {
+                if (auth) {
+                    const userCredential = await auth.createUserWithEmailAndPassword(email, pass);
+                    const user = userCredential.user;
+
+                    // Store user profile in Firestore
+                    if (db) {
+                        await db.collection('users').doc(user.uid).set({
+                            name: name,
+                            email: email,
+                            role: type.toLowerCase(),
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+
+                    // Update display name
+                    await user.updateProfile({ displayName: name });
+
+                    // Login successful
+                    setView(type === 'Restaurant' ? 'restaurant' : 'consumer');
+                } else {
+                    // Fallback
+                    console.warn('Firebase Auth/Firestore not configured. simulating signup.');
+                    setTimeout(() => {
+                        setView(type === 'Restaurant' ? 'restaurant' : 'consumer');
+                    }, 1500);
+                }
+            } catch (err) {
+                console.error(err);
+                errorDiv.innerText = err.message || "Signup failed.";
+                errorDiv.classList.remove('d-none');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        function updateNavbar() {
+            const navContainer = document.getElementById('nav-actions');
+            let html = '';
+
+            // Theme Toggle (Always visible)
+            const themeBtn = `
+                <div class="dropdown me-3">
+                    <button class="btn btn-light rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-adjust"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                        <li><a class="dropdown-item" href="#" onclick="setTheme('light')"><i class="fas fa-sun me-2"></i>Light</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setTheme('dark')"><i class="fas fa-moon me-2"></i>Dark</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setTheme('auto')"><i class="fas fa-desktop me-2"></i>System</a></li>
+                    </ul>
+                </div>
+            `;
+
+            if (currentView === 'landing') {
+                if (auth && auth.currentUser) {
+                    const targetView = userProfile && userProfile.role === 'restaurant' ? 'restaurant' : 'consumer';
+                    html = `
+                        ${themeBtn}
+                        <button class="btn btn-custom me-2 rounded-pill fw-bold" onclick="setView('${targetView}')">
+                            <i class="fas fa-columns me-2"></i>My Dashboard
+                        </button>
+                        <button class="btn btn-outline-danger rounded-pill fw-bold" onclick="handleLogout()">Logout</button>
+                    `;
+                } else {
+                    html = `
+                        ${themeBtn}
+                        <button class="btn btn-outline-primary me-2 rounded-pill fw-bold" onclick="startLogin('restaurant')">Restaurant Login</button>
+                        <button class="btn btn-primary rounded-pill fw-bold" onclick="startLogin('consumer')">Consumer Login</button>
+                    `;
+                }
+            } else {
+                html = `
+                    ${themeBtn}
+                    <button class="btn btn-outline-danger rounded-pill fw-bold" onclick="handleLogout()">Logout</button>
+                `;
+            }
+            navContainer.innerHTML = html;
+        }
+
+
+
+        function renderLandingPage(container) {
+            const section = document.createElement('div');
+            section.className = 'fade-in';
+            section.innerHTML = `
+                <!-- Hero Section - MOVED INSIDE LANDING (Correcting Request) -->
+                <header class="hero-section">
+                    <div class="container">
+                        <h1 class="hero-title mb-3">Plate to Purpose</h1>
+                        <p class="lead mb-0 fs-3">Rescue Food, Save Earth</p>
+                    </div>
+                </header>
+
+                <div class="container mb-5">
+                    <!-- Impact Stats -->
+                    <div class="row mb-5 justify-content-center">
+                        <div class="col-md-5 mb-3">
+                            <div class="card impact-card p-3">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-cloud-open impact-icon me-3"></i>
+                                    <div>
+                                        <h3 class="mb-0 fw-bold">12kg</h3>
+                                        <small class="text-muted">CO2 Emissions Saved</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <div class="card impact-card p-3">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-utensils impact-icon me-3"></i>
+                                    <div>
+                                        <h3 class="mb-0 fw-bold">50</h3>
+                                        <small class="text-muted">Meals Rescued</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Info -->
+                    <div class="row mb-5">
+                        <div class="col-lg-8 mx-auto text-center">
+                            <h2 class="fw-bold mb-4">Our Mission</h2>
+                            <div class="p-4 bg-glass rounded-4 shadow-sm">
+                                <p class="lead text-muted mb-0">
+                                    RescueRations connects local restaurants with surplus food to consumers who want delicious meals at a fraction of the cost.
+                                    We aim to eliminate food waste, reduce carbon footprints, and build a community of conscious eaters.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Members -->
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold mb-4">Meet the Team</h2>
+                        <div class="row justify-content-center">
+                            <div class="col-md-3 mb-4">
+                                <div class="card custom-card p-3 h-100">
+                                    <div class="mb-3 d-flex justify-content-center align-items-center bg-light rounded-circle mx-auto" style="width:100px; height:100px;">
+                                        <i class="fas fa-user text-secondary fa-3x"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Member 1</h5>
+                                    <p class="small text-muted">Project Lead</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <div class="card custom-card p-3 h-100">
+                                    <div class="mb-3 d-flex justify-content-center align-items-center bg-light rounded-circle mx-auto" style="width:100px; height:100px;">
+                                        <i class="fas fa-code text-secondary fa-3x"></i>
+                                    </div>
+                                    <h5 class="fw-bold">Member 2</h5>
+                                    <p class="small text-muted">Developer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(section);
+        }
+
+        // --- Restaurant View ---
+
+        function renderRestaurantView(container) {
+            const section = document.createElement('div');
+            section.className = 'fade-in';
+            section.innerHTML = `
+                <div class="row">
+                    < !--Add Item Form-- >
+                    <div class="col-lg-5 mb-4">
+                        <div class="custom-card p-4 h-100">
+                            <h4 class="fw-bold mb-4"><i class="fas fa-plus-circle me-2 text-success"></i>Add New Listing</h4>
+                            <form id="addFoodForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Food Item Name</label>
+                                    <input type="text" class="form-control" id="foodName" required placeholder="e.g., Paneer Tikka">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Quantity Available</label>
+                                    <input type="number" class="form-control" id="foodQty" required value="1" min="1">
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label">Original Price (₹)</label>
+                                        <input type="number" class="form-control" id="origPrice" required min="0">
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label">Rescue Price (₹)</label>
+                                        <input type="number" class="form-control" id="discPrice" required min="0">
+                                    </div>
+                                </div>
+                                
+                                <div class="d-grid gap-2 mb-3">
+                                    <button type="button" class="btn btn-outline-custom" onclick="predictSurplus()">
+                                        <i class="fas fa-magic me-2"></i>Predict Surplus (AI)
+                                    </button>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label">Food Image URL <small class="text-muted">(Optional)</small></label>
+                                    <input type="url" class="form-control" id="foodImage" placeholder="https://example.com/food.jpg">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-custom w-100 btn-lg shadow">List Item</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!--Active Listings List-->
+                <div class="col-lg-7">
+                    <h4 class="fw-bold mb-3">My Active Listings</h4>
+                    <div class="list-group">
+                        ${foodListings.map(item => `
+                                <div class="list-group-item custom-card mb-3 p-3 border-0 d-flex align-items-center">
+                                    <div class="me-3">
+                                        <img src="${item.image}" class="rounded-3" width="80" height="80" style="object-fit:cover;">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="fw-bold mb-1">${item.name}</h5>
+                                        <div class="text-muted small">
+                                            <span class="me-3"><i class="fas fa-box me-1"></i>Qty: ${item.qty}</span>
+                                            <span class="text-success fw-bold">₹${item.discountedPrice}</span> 
+                                            <span class="text-decoration-line-through small ms-1">₹${item.originalPrice}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-sm btn-outline-danger rounded-circle"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                    </div>
+                </div>
+                </div>
+                `;
+
+            container.appendChild(section);
+
+            // Add Form Event Listener
+            document.getElementById('addFoodForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                addNewListing();
+            });
+        }
+
+        // --- Consumer View ---
+
+        function renderConsumerView(container) {
+            const section = document.createElement('div');
+            section.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold">Explore Rescue Meals</h4>
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button">Filter By</button>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    ${foodListings.filter(item => item.qty > 0).map(item => {
+                const discount = Math.round(((item.originalPrice - item.discountedPrice) / item.originalPrice) * 100);
+                return `
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card food-card custom-card h-100">
+                                <span class="discount-badge">-${discount}%</span>
+                                <img src="${item.image}" class="card-img-top food-img" alt="${item.name}">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title fw-bold mb-0">${item.name}</h5>
+                                        
+                                    </div>
+                                    <p class="text-muted small mb-2"><i class="fas fa-store me-1"></i>${item.restaurant}</p>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <span class="h4 text-success fw-bold mb-0">₹${item.discountedPrice}</span>
+                                            <span class="text-decoration-line-through text-muted small ms-1">₹${item.originalPrice}</span>
+                                        </div>
+                                        <small class="text-danger fw-bold"><i class="fas fa-clock me-1"></i>Ends in ${item.expiresIn}h</small>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <small class="text-muted"><i class="fas fa-box me-1"></i>Qty: ${item.qty}</small>
+                                    </div>
+                                    <button class="btn btn-custom w-100 ${item.qty <= 0 ? 'disabled' : ''}" onclick="rescueItem('${item.id}')">
+                                        ${item.qty > 0 ? 'Rescue Now' : 'Sold Out'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+            }).join('')}
+                </div>
+                </div>
+                
+                <!-- My Orders Section -->
+                <div class="mt-5">
+                    <h4 class="fw-bold mb-4">My Rescues <span class="badge bg-primary rounded-pill small ms-2">${myOrders.length}</span></h4>
+                    ${myOrders.length === 0 ?
+                    '<div class="text-center text-muted py-5 bg-light rounded-3"><i class="fas fa-box-open fa-3x mb-3 opacity-50"></i><p>No rescues yet. Start saving food!</p></div>' :
+                    '<div class="list-group">' +
+                    myOrders.map(order => {
+                        const item = foodListings.find(f => f.id === order.itemId);
+                        const itemName = item ? item.name : 'Unknown Item';
+                        const itemImg = item ? item.image : '';
+                        const statusColor = order.status === 'collected' ? 'success' : 'warning';
+
+                        return `
+                                <div class="list-group-item custom-card mb-3 p-3 border-0 d-flex align-items-center">
+                                    <div class="me-3">
+                                        <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="width:60px; height:60px; overflow:hidden;">
+                                            ${itemImg ? `<img src="${itemImg}" style="width:100%; height:100%; object-fit:cover;">` : '<i class="fas fa-utensils text-muted"></i>'}
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="fw-bold mb-1">${itemName}</h6>
+                                        <div class="small text-muted">
+                                            <span>Date: ${order.date ? new Date(order.date.seconds * 1000).toLocaleDateString() : 'Just now'}</span>
+                                            <span class="mx-2">•</span>
+                                            <span>Code: <span class="font-monospace fw-bold text-dark">${order.code}</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge bg-${statusColor} bg-opacity-10 text-${statusColor} px-3 py-2 rounded-pill text-uppercase" style="font-size:0.7rem; letter-spacing:1px;">
+                                            ${order.status}
+                                        </span>
+                                    </div>
+                                </div>
+                             `;
+                    }).join('') +
+                    '</div>'
+                }
+                </div>
+            `;
+            container.appendChild(section);
+        }
+
+        // --- Logic Functions ---
+
+        function predictSurplus() {
+            // Simulate AI logic
+            const prices = [120, 180, 250, 300, 90];
+            const randomPrice = prices[Math.floor(Math.random() * prices.length)];
+            const discount = Math.floor(randomPrice * 0.4); // 40-60% off usually
+
+            document.getElementById('origPrice').value = randomPrice;
+            document.getElementById('discPrice').value = randomPrice - discount;
+
+            // Visual feedback
+            const btn = document.querySelector('button[onclick="predictSurplus()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-robot me-2"></i>AI Optimized!';
+            // Reset after 2s
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 2000);
+        }
+
+        async function addNewListing() {
+            const name = document.getElementById('foodName').value;
+            const qty = document.getElementById('foodQty').value;
+            const origPrice = document.getElementById('origPrice').value;
+            const discPrice = document.getElementById('discPrice').value;
+            let imageUrl = document.getElementById('foodImage').value;
+
+            const restaurantName = userProfile ? userProfile.name : "My Restaurant";
+
+            // Smart Image Reuse: Check history for same item name by this restaurant
+            if (!imageUrl) {
+                const previousItem = foodListings.find(item =>
+                    item.name.trim().toLowerCase() === name.trim().toLowerCase() &&
+                    item.restaurant === restaurantName &&
+                    item.image &&
+                    !item.image.includes("unsplash.com/photo-1546069901") // Don't reuse placeholder
+                );
+
+                if (previousItem) {
+                    imageUrl = previousItem.image;
+                }
+            }
+
+            const newItem = {
+                name: name,
+                restaurant: restaurantName,
+                location: { lat: 28.6139, lng: 77.2090 }, // Hardcoded for demo
+                qty: parseInt(qty),
+                originalPrice: parseInt(origPrice),
+                discountedPrice: parseInt(discPrice),
+                image: imageUrl || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60",
+                expiresIn: 4,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            const submitBtn = document.querySelector('#addFoodForm button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Listing...';
+            submitBtn.disabled = true;
+
+            try {
+                if (db) {
+                    await db.collection('listings').add(newItem);
+                } else {
+                    // Fallback
+                    newItem.id = Date.now();
+                    foodListings.unshift(newItem);
+                    localStorage.setItem('foodListings', JSON.stringify(foodListings));
+                    renderApp();
+                }
+
+                alert('Listing Added Successfully!');
+                document.getElementById('addFoodForm').reset();
+            } catch (e) {
+                console.error("Error adding listing: ", e);
+                alert("Failed to add listing.");
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // --- Checkout & Logic ---
+
+        let currentRescueLocation = null;
+
+        function rescueItem(itemId) {
+            const item = foodListings.find(i => i.id === itemId);
+            if (!item || item.qty <= 0) {
+                alert('Item is out of stock!');
+                return;
+            }
+
+            selectedRescueItemId = itemId;
+            currentRescueLocation = item.location || { lat: 28.6139, lng: 77.2090 };
+
+            // Open Checkout Modal
+            const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+            checkoutModal.show();
+
+            // Setup Quantity Input
+            const qtyInput = document.getElementById('rescueQty');
+            const qtyHelper = document.getElementById('qtyHelper');
+            qtyInput.max = item.qty;
+            qtyInput.value = 1;
+            qtyHelper.innerText = `(Available: ${item.qty})`;
+
+            // Initialize map when modal is shown - Pass the location
+            const modalEl = document.getElementById('checkoutModal');
+            modalEl.removeEventListener('shown.bs.modal', initCheckoutMapHandler); // Remove old if any
+            modalEl.addEventListener('shown.bs.modal', initCheckoutMapHandler);
+        }
+
+        function initCheckoutMapHandler() {
+            initCheckoutMap(currentRescueLocation);
+        }
+
+        function initCheckoutMap(location) {
+            // Check if Google Maps is actually loaded
+            const mapContainer = document.getElementById('map');
+            if (typeof google === 'undefined' || !google.maps) {
+                mapContainer.innerHTML = `
+                     <div class="h-100 d-flex flex-column align-items-center justify-content-center text-muted bg-light rounded">
+                         <i class="fas fa-map-marked-alt fa-2x mb-2 text-secondary"></i>
+                         <p class="mb-0">Map Unavailable</p>
+                         <small class="text-secondary">(API Key Missing or Invalid)</small>
+                     </div>`;
+                return;
+            }
+
+            const pos = location || { lat: 28.6139, lng: 77.2090 };
+
+            if (!map) {
+                try {
+                    map = new google.maps.Map(document.getElementById("map"), {
+                        zoom: 15,
+                        center: pos,
+                        mapId: "DEMO_MAP_ID",
+                        streetViewControl: false,
+                        mapTypeControl: false
+                    });
+                } catch (e) {
+                    console.error("Map Init Failed:", e);
+                    mapContainer.innerHTML = '<div class="h-100 d-flex align-items-center justify-content-center text-danger">Map Error</div>';
+                    return;
+                }
+            } else {
+                map.setCenter(pos);
+                map.setZoom(15);
+            }
+
+            // Always Place/Move Marker
+            placeMarker(pos);
+        }
+
+        function placeMarker(latLng) {
+            if (marker) {
+                marker.setPosition(latLng);
+            } else {
+                marker = new google.maps.Marker({
+                    position: latLng,
+                    map: map,
+                    animation: google.maps.Animation.DROP,
+                    title: "Pickup Location"
+                });
+            }
+        }
+
+        function confirmCheckout() {
+            // Validation
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+            const email = document.getElementById('userEmail').value;
+
+            if (!name || !phone || !email) {
+                alert('Please fill in all details.');
+                return;
+            }
+
+            /*
+            // No longer validating map click for pickup
+            if (!deliveryLocation && typeof google !== 'undefined') {
+                document.getElementById('locationError').classList.remove('d-none');
+                return;
+            }
+            */
+
+            // Proceed
+            // Proceed
+            const qty = parseInt(document.getElementById('rescueQty').value) || 1;
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+            modal.hide();
+
+            // Simulate GPay Processing
+            if (paymentMethod === 'gpay') {
+                const backdrop = document.createElement('div');
+                backdrop.className = 'position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center';
+                backdrop.style.background = 'rgba(0,0,0,0.8)';
+                backdrop.style.zIndex = '9999';
+                backdrop.innerHTML = `
+                    <div class="bg-white p-4 rounded-3 text-center shadow-lg fade-in">
+                        <div class="spinner-border text-primary mb-3" role="status"></div>
+                        <h5 class="fw-bold">Contacting Google Pay...</h5>
+                        <p class="text-muted small mb-0">Please wait while we secure your payment.</p>
+                    </div>
+                `;
+                document.body.appendChild(backdrop);
+
+                // Fake 2s Delay
+                setTimeout(() => {
+                    document.body.removeChild(backdrop);
+                    finalizeRescue(selectedRescueItemId, qty, 'gpay');
+                }, 2000);
+            } else {
+                finalizeRescue(selectedRescueItemId, qty, 'cash');
+            }
+        }
+
+        async function finalizeRescue(itemId, quantity = 1, paymentMethod = 'cash') {
+            const btn = document.querySelector('.modal-footer .btn-custom'); // Confirm btn
+            if (btn) btn.disabled = true;
+
+            try {
+                if (db) {
+                    const itemRef = db.collection('listings').doc(itemId.toString());
+
+                    // Transaction to ensure atomic update
+                    await db.runTransaction(async (transaction) => {
+                        const sfDoc = await transaction.get(itemRef);
+                        if (!sfDoc.exists) {
+                            throw "Document does not exist!";
+                        }
+                        const currentQty = sfDoc.data().qty;
+                        const newQty = currentQty - quantity;
+
+                        if (newQty < 0) {
+                            throw "Insufficient stock! Only " + currentQty + " left.";
+                        }
+                        transaction.update(itemRef, { qty: newQty });
+                    });
+
+                    // Record Order
+                    await db.collection('orders').add({
+                        itemId: itemId,
+                        userId: auth.currentUser ? auth.currentUser.uid : 'guest',
+                        qty: quantity,
+                        paymentMethod: paymentMethod,
+                        paymentStatus: paymentMethod === 'gpay' ? 'paid' : 'pending',
+                        date: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: 'reserved',
+                        code: 'RES-' + Math.floor(1000 + Math.random() * 9000)
+                    });
+
+                } else {
+                    // Fallback
+                    const itemIndex = foodListings.findIndex(i => i.id === itemId);
+                    if (itemIndex > -1 && foodListings[itemIndex].qty >= quantity) {
+                        foodListings[itemIndex].qty -= quantity;
+                        localStorage.setItem('foodListings', JSON.stringify(foodListings));
+                        renderApp();
+                    }
+                }
+
+
+                // Play Sound
+                playPartySound();
+
+                // Confetti
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#2ecc71', '#f1c40f', '#e74c3c']
+                });
+
+                // Show Modal
+                const pickupCode = 'RES-' + Math.floor(1000 + Math.random() * 9000);
+                document.getElementById('pickupCode').innerText = pickupCode;
+
+                const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                successModal.show();
+
+                // Reset Forms
+                document.getElementById('checkoutForm').reset();
+                if (marker) marker.setMap(null);
+                marker = null;
+                // deliveryLocation = null; // No longer needed
+
+            } catch (e) {
+                console.error("Rescue failed: ", e);
+                // alert("Rescue failed: " + e); // Fail silently or show error
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        function playPartySound() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContext) return;
+
+            const ctx = new AudioContext();
+
+            // 1. Noise Burst (The "Pop")
+            const bufferSize = ctx.sampleRate * 1; // 1 second buffer
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+            const noiseGain = ctx.createGain();
+
+            // Filter out low frequencies from noise for a crisp pop
+            const noiseFilter = ctx.createBiquadFilter();
+            noiseFilter.type = 'highpass';
+            noiseFilter.frequency.value = 800;
+
+            noise.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(ctx.destination);
+
+            // Fast decay envelope for noise
+            noiseGain.gain.setValueAtTime(0.5, ctx.currentTime);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+
+            noise.start();
+            noise.stop(ctx.currentTime + 0.2);
+
+            // 2. Low Thump (Body of the sound)
+            const osc = ctx.createOscillator();
+            const oscGain = ctx.createGain();
+
+            osc.connect(oscGain);
+            oscGain.connect(ctx.destination);
+
+            osc.frequency.setValueAtTime(150, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.15);
+
+            oscGain.gain.setValueAtTime(0.3, ctx.currentTime);
+            oscGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+
+            osc.start();
+            osc.stop(ctx.currentTime + 0.2);
+        }
+
+
+        // --- Init ---
+
+        function initApp() {
+            // Check Auth State
+            if (auth) {
+                auth.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        console.log("User logged in:", user.email);
+
+                        // Fetch User Profile
+                        if (db) {
+                            try {
+                                const doc = await db.collection('users').doc(user.uid).get();
+                                if (doc.exists) {
+                                    userProfile = doc.data();
+                                    console.log("Profile loaded:", userProfile.role);
+                                }
+                            } catch (e) {
+                                console.error("Error fetching profile", e);
+                            }
+                        }
+
+                        subscribeToOrders();
+                        updateNavbar();
+
+                        // Redirect logic if on login page
+                        if (currentView.startsWith('login-') || currentView.startsWith('signup-')) {
+                            if (userProfile) {
+                                setView(userProfile.role === 'restaurant' ? 'restaurant' : 'consumer');
+                            } else {
+                                goHome(); // Fallback
+                            }
+                        } else {
+                            renderApp(); // Re-render to show correct nav/view
+                        }
+
+                    } else {
+                        // Signed out
+                        userProfile = null;
+                        myOrders = [];
+                        if (ordersUnsubscribe) ordersUnsubscribe();
+
+                        // Protect Routes
+                        if (currentView === 'restaurant' || currentView === 'consumer') {
+                            goHome();
+                        } else {
+                            renderApp();
+                        }
+                    }
+                });
+            }
+
+            subscribeToListings();
+            // renderApp is called inside subscribeToListings
+            renderApp();
+        }
+
+        function subscribeToOrders() {
+            if (!db || !auth || !auth.currentUser) return;
+
+            if (ordersUnsubscribe) ordersUnsubscribe();
+
+            // Only consumers have orders for now. Restaurants might have 'sales'
+            try {
+                ordersUnsubscribe = db.collection('orders')
+                    .where('userId', '==', auth.currentUser.uid)
+                    .orderBy('date', 'desc')
+                    .onSnapshot(snap => {
+                        myOrders = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        if (currentView === 'consumer') renderApp();
+                    }, err => {
+                        // Handle missing index or permission error
+                        console.log("Orders subscription note:", err);
+                        // If index is missing, it will error. We can fallback to client-side sorting if needed or just ignore for demo.
+                    });
+            } catch (e) {
+                console.error("Error subscribing to orders:", e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTheme(currentTheme);
+            initApp();
+        });
+
+        // --- Theme Logic ---
+        function setTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('theme', theme);
+            applyTheme(theme);
+        }
+
+        function applyTheme(theme) {
+            const html = document.documentElement;
+            if (theme === 'auto') {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    html.setAttribute('data-theme', 'dark');
+                } else {
+                    html.setAttribute('data-theme', 'light');
+                }
+            } else {
+                html.setAttribute('data-theme', theme);
+            }
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (currentTheme === 'auto') applyTheme('auto');
+        });
+
+    </script>
+</body>
+
+</html>

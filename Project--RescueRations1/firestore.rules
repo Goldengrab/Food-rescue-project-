@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is signed in
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper to fetch user role
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+
+    // Users Collection
+    // - Users can read and write their own profile
+    // - Public read might be needed if restaurants need to see user names (for orders)
+    match /users/{userId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Listings Collection
+    // - Public read (everyone can see food)
+    // - Create: Only Restaurants
+    // - Update: Restaurants (owner) OR Consumers (decrementing stock via transaction)
+    match /listings/{listingId} {
+      allow read: if true;
+      
+      allow create: if isAuthenticated() && getUserRole() == 'restaurant';
+      
+      // Complex update logic:
+      // 1. Restaurant owner updating details
+      // 2. Consumer decreasing quantity (during rescue)
+      allow update: if isAuthenticated() && (
+        getUserRole() == 'restaurant' || 
+        (request.resource.data.qty < resource.data.qty) // Allow stock reduction
+      );
+    }
+    
+    // Orders Collection
+    // - Create: Authenticated Users (Consumers)
+    // - Read: The user who created it OR a Restaurant (to see orders)
+    match /orders/{orderId} {
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid || 
+        getUserRole() == 'restaurant'
+      );
+    }
+  }
+}
